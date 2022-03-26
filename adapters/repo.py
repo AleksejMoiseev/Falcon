@@ -1,6 +1,7 @@
 from classic.components.component import component
 from classic.sql_storage.repository import BaseRepository
-from sqlalchemy import select, desc
+from sqlalchemy import select, desc, text, func
+from adapters.tables import employees
 
 from aplications.dataclases import Chat, Employee
 from aplications.interface import RepositoryInterface
@@ -31,7 +32,8 @@ class EmployeeRepository(SQLiteRepository, BaseRepository):
     model = Employee
 
     def get_departments_performance_sum(self):
-        pass
+        query_text = text("select department_id, sum(performance) from employee group by department_id")
+        return self.session.execute(query_text).all()
 
     def get_most_successfully_employees(self):
         query = (select(self.model).order_by(desc(self.model.performance))

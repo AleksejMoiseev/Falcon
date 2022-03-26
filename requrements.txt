@@ -14,3 +14,6 @@ PyJWT==2.3.0
 pydantic-sqlite==0.1.1
 sqlalchemy~=1.4.23
 classic-sql-storage~=0.0.1
+python-dotenv==0.20.0
+mysqlclient==2.1.0
+

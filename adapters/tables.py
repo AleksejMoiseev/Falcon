@@ -1,7 +1,7 @@
 from sqlalchemy import (
     MetaData, Table, Column, Integer, String, Float, ForeignKey
 )
-from sqlalchemy.orm import registry
+from sqlalchemy.orm import registry, relationship
 
 from aplications.dataclases import Chat, Department, Employee
 
@@ -29,5 +29,7 @@ employees = Table(
 )
 
 mapper_registry.map_imperatively(Chat, chats)
-mapper_registry.map_imperatively(Department, departments)
+mapper_registry.map_imperatively(Department, departments, properties={
+    'employee': relationship(Employee, backref='department', uselist=False)
+})
 mapper_registry.map_imperatively(Employee, employees)

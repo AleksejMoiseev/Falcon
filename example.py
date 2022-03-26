@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 
 from adapters import DBSettings, metadata
 from adapters import repo
-from adapters.controllers import Departments, Employees
+from adapters.controllers import Departments, Employees, EmployeesNew
 from algoritmika.exception import NotStatusExceptioms
 from algoritmika.middleware import JSONTranslator
 from algoritmika.views import (
@@ -37,6 +37,7 @@ service_employee = ServiceEmployee(employee_repositories=employee_repositories)
 
 department = Departments(service_department=service_department)
 employee = Employees(service_employee=service_employee)
+employees_new = EmployeesNew(service_employee=service_employee)
 
 
 class ThingsResource:
@@ -72,6 +73,7 @@ books_controller = BookBaseViews()
 app.add_route('/things', things)
 app.add_route('/department/', department)
 app.add_route('/employee/', employee)
+app.add_route('/employee-max/', employees_new)
 app.add_route('/users/', users_controller)
 app.add_route('/users/{user_id}', user_controller)
 app.add_route('/books/{book_id}', books_controller)

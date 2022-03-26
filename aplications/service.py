@@ -43,7 +43,7 @@ class ServiceEmployee(EmployeeServiceInterface):
         return self.employee_repositories.add(employee)
 
     def get_departments_performance_sum(self):
-        pass
+        return self.employee_repositories.get_departments_performance_sum()
 
     def get_most_successfully_employees(self):
         return self.employee_repositories.get_most_successfully_employees()

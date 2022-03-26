@@ -49,3 +49,13 @@ class Employees:
         }
         resp.body = result
         resp.status = falcon.HTTP_200
+
+
+@component
+class EmployeesNew:
+    service_employee: EmployeeServiceInterface
+
+    def on_get(self, req: Request, resp: Response):
+        employees = self.service_employee.get_departments_performance_sum()
+        resp.body = dict(employees)
+        resp.status = falcon.HTTP_200
