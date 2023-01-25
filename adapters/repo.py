@@ -1,8 +1,8 @@
 from classic.components.component import component
 from classic.sql_storage.repository import BaseRepository
-from sqlalchemy import select, desc, text, func
-from adapters.tables import employees, departments
+from sqlalchemy import select, desc, text, func, delete
 
+from adapters.tables import employees, departments
 from aplications.dataclases import Chat, Employee
 from aplications.interface import RepositoryInterface
 
@@ -26,6 +26,26 @@ class SQLiteRepository(BaseRepository, RepositoryInterface):
         self.session.flush()
         return entity
 
+    def get(self, reference):
+        return self.session.query(self.model).filter_by(id=reference).one_or_none()
+
+    def get_list(self, limit: int = None, offset: int = None):
+        limit = limit or 5
+        offset = offset or 0
+        query = select(self.model)
+        return self.session.execute(query).scalars().all()[offset: offset + limit]
+
+    def delete(self, reference):
+        #query = delete(self.model).where(self.model.id==reference).exdelete(synchronize_session='fetch')
+        #q1 = select(self.model).filter_by(id=1)
+        q = self.session.query(self.model).filter(self.model.id==reference).delete()
+        self.session.commit()
+        return q
+
+    def filer_by(self, params):
+        entity_model = self.session.query(self.model).filter_by(**params).one_or_none()
+        return entity_model
+
 
 @component
 class EmployeeRepository(SQLiteRepository, BaseRepository):
@@ -45,3 +65,10 @@ class EmployeeRepository(SQLiteRepository, BaseRepository):
         query = (select(self.model).order_by(desc(self.model.performance))
                  .limit(1))
         return self.session.execute(query).scalar()
+
+    def proba_relationsships_alchemy(self):
+        """Изучал relatioships  как можно доставать обьекты через relationship"""
+        from aplications.dataclases import Department, Employee
+        query = select(Employee).order_by(desc(Employee.id)).limit(1)
+        department = self.session.execute(query).scalar()
+        print('!!!!!!!', department.departmen.name)

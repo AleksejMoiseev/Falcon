@@ -22,6 +22,24 @@ class Departments:
         resp.body = result
         resp.status = falcon.HTTP_201
 
+    def on_get(self, req: Request, resp: Response):
+        departments = self.service_department.get_lists()
+        print("departments", departments)
+        resp.status = falcon.HTTP_200
+
+    def on_put(self, req: Request, resp: Response):
+        params = req.get_media()
+        # pk = int(params.get('pk', 1))
+        department = self.service_department.filer_by(params)
+        print('department', department)
+        resp.status = falcon.HTTP_200
+
+    def on_delete(self, req: Request, resp: Response):
+        params = req.get_media()
+        pk = int(params.get('pk'))
+        department = self.service_department.delete(pk)
+        print('department', department)
+        resp.status = falcon.HTTP_204
 
 @component
 class Employees:
@@ -47,6 +65,8 @@ class Employees:
             "performance": employee.performance,
             "department": employee.department_id,
         }
+        result_new = self.service_employee.get_new_relations_ships()
+        print('!!!!!!!!!!!!!!!', result_new)
         resp.body = result
         resp.status = falcon.HTTP_200
 

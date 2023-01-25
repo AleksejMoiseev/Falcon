@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from adapters import DBSettings, metadata
 from adapters import repo
 from adapters.controllers import Departments, Employees, EmployeesNew
-from algoritmika.exception import NotStatusExceptioms
+from algoritmika.exception import NotStatusExceptioms, BadRequest
 from algoritmika.middleware import JSONTranslator
 from algoritmika.views import (
     UserController, UsersController,
@@ -21,6 +21,7 @@ from aplications.dataclases import Chat, Department, Employee
 from aplications.service import ServiceDepartment, ServiceEmployee
 
 db_settings = DBSettings(DB_URL="sqlite:///hello.db")
+#db_settings = DBSettings(DB_URL="mysql://exchange:exchange@localhost:3306/user_bootcamp")
 
 engine = create_engine(db_settings.DB_URL, echo=True)
 metadata.create_all(engine)
@@ -61,6 +62,7 @@ middleware = [
 ]
 app = App(middleware=middleware)
 app.add_error_handler(NotStatusExceptioms)
+app.add_error_handler(BadRequest)
 
 # Resources are represented by long-lived class instances
 things = ThingsResource()

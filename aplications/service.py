@@ -1,12 +1,15 @@
 from classic.components.component import component
 from sqlalchemy import select
+from sqlalchemy.exc import InvalidRequestError
 
+from algoritmika.exception import NotStatusExceptioms, BadRequest
 from aplications.dataclases import Department, Employee
 from aplications.interface import (
     RepositoryInterface, DepartmentServiceInterface,
     EmployeeServiceInterface
 )
 from classic.app.dto import DTO
+
 
 
 class DepartmentDTO(DTO):
@@ -31,6 +34,22 @@ class ServiceDepartment(DepartmentServiceInterface):
         department = Department(**data)
         return self.repo_employee.add(department)
 
+    def get_lists(self):
+        return self.repo_employee.get_list()
+
+    def get(self, pk):
+        return self.repo_employee.get(pk)
+
+    def delete(self, pk):
+        return self.repo_employee.delete(pk)
+
+    def filer_by(self, params):
+        try:
+            entity_model = self.repo_employee.filer_by(params)
+        except InvalidRequestError:
+            raise BadRequest()
+        return entity_model
+
 
 @component
 class ServiceEmployee(EmployeeServiceInterface):
@@ -47,6 +66,9 @@ class ServiceEmployee(EmployeeServiceInterface):
 
     def get_most_successfully_employees(self):
         return self.employee_repositories.get_most_successfully_employees()
+
+    def get_new_relations_ships(self):
+        return self.employee_repositories.proba_relationsships_alchemy()
 
 
 if __name__ == '__main__':

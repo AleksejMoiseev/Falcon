@@ -5,7 +5,7 @@ import attr
 
 @attr.dataclass
 class BaseModel:
-    pk: Optional[int] = None
+    id: Optional[int] = None
 
 
 @attr.dataclass
