@@ -4,6 +4,7 @@
 .directory
 .Trash-*
 .nfs*
+hello.db
 __pycache__/
 *.py[cod]
 *$py.class
